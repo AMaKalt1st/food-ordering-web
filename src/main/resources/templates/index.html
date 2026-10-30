@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>FoodOrdering 点餐系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4">🍽️ FoodOrdering 点餐系统</h1>
+        <p class="lead">欢迎您，<span th:text="${session.username}">用户</span>！
+            <span th:if="${session.role == 'admin'}" class="badge bg-danger">管理员</span>
+            <span th:if="${session.role == 'merchant'}" class="badge bg-success">商家</span>
+            <span th:if="${session.role == 'user'}" class="badge bg-primary">普通用户</span>
+        </p>
+        <a href="/logout" class="btn btn-outline-danger btn-sm">退出登录</a>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- 菜品管理：所有角色可见 -->
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🍜 菜品管理</h5>
+                    <p class="card-text">查看、搜索菜品信息</p>
+                    <a href="/dishes" class="btn btn-primary">查看</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 商家管理：仅管理员可见 -->
+        <div class="col-md-3" th:if="${session.role == 'admin'}">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🏪 商家管理</h5>
+                    <p class="card-text">管理商家信息</p>
+                    <a href="/merchants" class="btn btn-success">进入</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户管理：仅管理员可见 -->
+        <div class="col-md-3" th:if="${session.role == 'admin'}">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">👤 用户管理</h5>
+                    <p class="card-text">管理用户信息</p>
+                    <a href="/users" class="btn btn-info">进入</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 订单管理：所有角色可见 -->
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📋 订单管理</h5>
+                    <p class="card-text">查看订单列表和详情</p>
+                    <a href="/orders" class="btn btn-warning">查看</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增下单：仅普通用户可见 -->
+        <div class="col-md-3" th:if="${session.role == 'user' || session.role == 'admin'}">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🛒 新增下单</h5>
+                    <p class="card-text">选择菜品、提交订单</p>
+                    <a href="/orders/new" class="btn btn-success">去下单</a>
+                </div>
+            </div>
+        </div>
+        <!-- 在管理员可见的卡片中增加地址管理 -->
+        <div class="col-md-3" th:if="${session.role == 'admin'}">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📍 地址管理</h5>
+                    <p class="card-text">管理收货地址信息</p>
+                    <a href="/addresses" class="btn btn-secondary">进入</a>
+                </div>
+            </div>
+        </div>
+        <!-- 审计日志：仅管理员可见 -->
+        <div class="col-md-3" th:if="${session.role == 'admin'}">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📝 审计日志</h5>
+                    <p class="card-text">查看操作日志记录</p>
+                    <a href="/audit-logs" class="btn btn-secondary">查看</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

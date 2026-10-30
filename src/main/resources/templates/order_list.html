@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>
+        📋 订单列表
+        <small class="text-muted fs-6">
+            （当前排序：
+            <span th:text="${currentSort == 'asc'} ? '正序（旧→新）' : '倒序（新→旧）'"></span>）
+        </small>
+    </h2>
+
+    <div class="mb-3">
+        <a href="/" class="btn btn-secondary">返回首页</a>
+        <a th:href="@{/orders(sort='asc')}"
+           th:class="${currentSort == 'asc'} ? 'btn btn-primary active' : 'btn btn-outline-primary'">
+            ⬆ 正序（旧→新）
+        </a>
+        <a th:href="@{/orders(sort='desc')}"
+           th:class="${currentSort == 'desc'} ? 'btn btn-primary active' : 'btn btn-outline-primary'">
+            ⬇ 倒序（新→旧）
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>订单ID</th>
+            <th>用户ID</th>
+            <th>商家ID</th>
+            <th>总金额</th>
+            <th>状态</th>
+            <th>支付方式</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="o : ${orders}">
+            <td th:text="${o.orderId}"></td>
+            <td th:text="${o.userId}"></td>
+            <td th:text="${o.merchantId}"></td>
+            <td th:text="${o.totalAmount}"></td>
+            <td>
+                        <span th:text="${o.status}"
+                              th:class="${o.status == 'paid'} ? 'text-success' :
+                                       (${o.status == 'created'} ? 'text-primary' :
+                                       (${o.status == 'cancelled'} ? 'text-danger' : ''))">
+                        </span>
+            </td>
+            <td th:text="${o.payMethod}"></td>
+            <td th:text="${o.createdAt}"></td>
+            <td>
+                <a th:href="@{/orders/detail/{id}(id=${o.orderId})}" class="btn btn-sm btn-info">详情</a>
+                <a th:href="@{/orders/updateStatus?orderId=__${o.orderId}__&status=paid}" class="btn btn-sm btn-success">设为已支付</a>
+                <a th:href="@{/orders/updateStatus?orderId=__${o.orderId}__&status=cancelled}" class="btn btn-sm btn-danger">取消</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
